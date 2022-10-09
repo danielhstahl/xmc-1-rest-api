@@ -1,38 +1,44 @@
 mod commands;
-
-use commands::{EmotivaControl, EmotivaPing};
-//use serde_xml_rs::{to_string, Serializer};
+use commands::{EmotivaControl, EmotivaPing, EmotivaTransponder};
+use quick_xml::de::from_str;
 use quick_xml::se::to_string;
-use std::{collections::HashMap, net::UdpSocket};
-fn main() {
-    /*{
-        let socket = UdpSocket::bind("127.0.0.1:34254")?;
+use quick_xml::DeError;
+use std::env;
+use std::error::Error;
+use std::io;
+use std::net::{IpAddr, Ipv4Addr, SocketAddr};
+use std::str::from_utf8;
+use tokio::io::{AsyncReadExt, AsyncWriteExt};
+use tokio::net::UdpSocket;
+const XMC_PORT: usize = 7000;
+const XMC_RECEIVE_PORT: usize = 7001;
 
-        // Receives a single datagram message on the socket. If `buf` is too small to hold
-        // the message, it will be cut off.
-        let mut buf = [0; 10];
-        let (amt, src) = socket.recv_from(&mut buf)?;
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn Error>> {
+    let remote_addr: SocketAddr = env::args()
+        .nth(1)
+        .unwrap_or_else(|| "192.168.4.75:".to_string() + &XMC_PORT.to_string())
+        .parse()?;
 
-        // Redeclare `buf` as slice of the received data and send reverse data back to origin.
-        let buf = &mut buf[..amt];
-        buf.reverse();
-        socket.send_to(buf, &src)?;
-    } // the socket is closed here*/
+    // We use port 0 to let the operating system allocate an available port for us.
+    let local_addr: SocketAddr = if remote_addr.is_ipv4() {
+        "0.0.0.0:".to_string() + &XMC_RECEIVE_PORT.to_string()
+    } else {
+        "[::]:".to_string() + &XMC_RECEIVE_PORT.to_string()
+    }
+    .parse()?;
+
+    let socket = UdpSocket::bind(local_addr).await?;
+    const MAX_DATAGRAM_SIZE: usize = 65_507;
+    socket.connect(&remote_addr).await?;
     let ping = EmotivaPing {};
-    let result = to_string(&ping).unwrap();
+    let ping_se = to_string(&ping).unwrap();
+    socket.send(ping_se.as_bytes()).await?;
 
-    println!("{}", result);
-    let command = EmotivaControl::new("0".to_string());
+    let mut data = vec![0u8; MAX_DATAGRAM_SIZE];
+    let len = socket.recv(&mut data).await?;
+    let result: Result<EmotivaTransponder, DeError> = from_str(from_utf8(&data[..len]).unwrap());
+    println!("{}", result.unwrap().name);
 
-    // let commandtest = HashMap::from([("myCommand".to_owned(), "do_something".to_string())]);
-
-    //let mut se = Serializer::new_from_reader(in_xml.as_bytes()).non_contiguous_seq_elements(true);
-
-    let result = to_string(&command).unwrap();
-    println!("{}", result);
-
-    // <?xml version="1.0" encoding="utf-8"?>
-    // <emotivaControl>
-    //    <power_on value="0" ack="yes" />
-    // </emotivaControl>
+    Ok(())
 }
