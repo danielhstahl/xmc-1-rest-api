@@ -16,11 +16,15 @@ import Paper from '@mui/material/Paper';
 import Switch from '@mui/material/Switch';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { Power, XmcStatus, getStatus, volumeUp, volumeDown, setVolume, setMode, setSource, powerOn, standBy } from './services/api'
+import { Power, Mode, XmcStatus, getStatus, volumeUp, volumeDown, setVolume, setMode, setSource, powerOn, standBy } from './services/api'
 import Stack from '@mui/material/Stack';
 import Slider from '@mui/material/Slider';
 import VolumeDown from '@mui/icons-material/VolumeDown';
 import VolumeUp from '@mui/icons-material/VolumeUp';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 const drawerWidth: number = 240;
 interface AppBarProps extends MuiAppBarProps {
@@ -47,7 +51,7 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 function App() {
-  const [xmcStatus, setXmcStatus] = useState<XmcStatus>({ power: Power.Off, source: "na", volume: -100, mode: "na" });
+  const [xmcStatus, setXmcStatus] = useState<XmcStatus>({ power: Power.Off, source: "na", volume: -100, mode: Mode.surround });
   useEffect(() => {
     setInterval(() => {
       getStatus().then(setXmcStatus)
@@ -68,12 +72,22 @@ function App() {
   }
 
   const onVolumeChange = (_e: any, newVolume: number | number[]) => {
-    //if (typeof (newNumber) !== "array") {
     const volume = newVolume as number
     setXmcStatus((prev: XmcStatus) => ({ ...prev, volume }))
     setVolume(volume)
-    //}
+  }
 
+  const onModeChange = (e: SelectChangeEvent) => {
+    const mode = e.target.value as Mode
+    setXmcStatus((prev: XmcStatus) => ({ ...prev, mode }))
+    setMode(mode) //hmm, should be a type error here...
+  }
+
+  const onInputChange = (e: SelectChangeEvent) => {
+    const source = e.target.value as string
+    const sourceIndex = parseInt(source.replace("HDMI ", "")) //jankiest thing ever.....
+    setXmcStatus((prev: XmcStatus) => ({ ...prev, source }))
+    setSource(sourceIndex)
   }
 
   return (
@@ -133,6 +147,30 @@ function App() {
                       onChange={onPowerToggle}
                     />
                     } label="Power" />
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">Mode</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={xmcStatus.mode}
+                        label="Mode"
+                        onChange={onModeChange}
+                      >
+                        {Object.values(Mode).map((v, i) => <MenuItem value={v}>{v}</MenuItem>)}
+                      </Select>
+                    </FormControl>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">HDMI Input</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={xmcStatus.source}
+                        label="HDMI Input"
+                        onChange={onInputChange}
+                      >
+                        {[1, 2, 3, 4, 5, 6, 7, 8].map((v) => <MenuItem value={`HDMI ${v}`}>HDMI {v}</MenuItem>)}
+                      </Select>
+                    </FormControl>
                   </FormGroup>
 
                 </Paper>

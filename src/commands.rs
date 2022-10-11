@@ -274,10 +274,10 @@ pub struct GetInfo {
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Info {
-    power: String,
-    source: String,
+    power: String,  //or enum?
+    source: String, //enum?
     volume: f32,
-    mode: String,
+    mode: String, //enum?
 }
 
 impl Info {
@@ -286,7 +286,11 @@ impl Info {
             power: info.power.value,
             source: info.source.value,
             volume: info.volume.value,
-            mode: info.mode.value,
+            mode: if info.mode.value == "Direct" {
+                "Stereo".to_string()
+            } else {
+                info.mode.value
+            }, //is there a less janky way than this??
         }
     }
 }
