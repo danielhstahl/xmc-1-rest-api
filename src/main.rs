@@ -99,17 +99,17 @@ async fn standby(socket_state: &State<SocketState>) -> io::Result<Value> {
     Ok(json!({ "status": "ok" }))
 }
 
-#[post("/hdmi/<hdmi_index>")]
-async fn hdmi_input(hdmi_index: usize, socket_state: &State<SocketState>) -> io::Result<Value> {
-    let hdmi = match hdmi_index {
-        1 => Ok(EmotivaControl::set_hdmi_1()),
-        2 => Ok(EmotivaControl::set_hdmi_2()),
-        3 => Ok(EmotivaControl::set_hdmi_3()),
-        4 => Ok(EmotivaControl::set_hdmi_4()),
-        5 => Ok(EmotivaControl::set_hdmi_5()),
-        6 => Ok(EmotivaControl::set_hdmi_6()),
-        7 => Ok(EmotivaControl::set_hdmi_7()),
-        8 => Ok(EmotivaControl::set_hdmi_8()),
+#[post("/input/<hdmi_input>")]
+async fn hdmi_input(hdmi_input: String, socket_state: &State<SocketState>) -> io::Result<Value> {
+    let hdmi = match hdmi_input.as_str() {
+        "HDMI 1" => Ok(EmotivaControl::set_hdmi_1()),
+        "HDMI 2" => Ok(EmotivaControl::set_hdmi_2()),
+        "HDMI 3" => Ok(EmotivaControl::set_hdmi_3()),
+        "HDMI 4" => Ok(EmotivaControl::set_hdmi_4()),
+        "HDMI 5" => Ok(EmotivaControl::set_hdmi_5()),
+        "HDMI 6" => Ok(EmotivaControl::set_hdmi_6()),
+        "HDMI 7" => Ok(EmotivaControl::set_hdmi_7()),
+        "HDMI 8" => Ok(EmotivaControl::set_hdmi_8()),
         _ => Err(io::Error::new(
             io::ErrorKind::InvalidInput,
             "input must be between 1 and 8 inclusive",

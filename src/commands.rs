@@ -274,10 +274,10 @@ pub struct GetInfo {
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Info {
-    power: String,  //or enum?
-    source: String, //enum?
+    power: String,
+    source: String,
     volume: f32,
-    mode: String, //enum?
+    mode: String,
 }
 
 impl Info {
