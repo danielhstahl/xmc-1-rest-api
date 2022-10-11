@@ -1,0 +1,66 @@
+name: release
+on:
+  push:
+    branches:
+      master
+
+jobs:
+  release: 
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: '0'
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+
+    - name: Build
+      run: cargo build 
+
+    - name: Run tests stable
+      run: |
+        cargo test
+
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        target: armv7-unknown-linux-gnueabihf
+        override: true
+
+    - uses: actions-rs/cargo@v1
+      with:
+        use-cross: true
+        command: build
+        args: --target armv7-unknown-linux-gnueabihf
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16
+    - name: compile client
+      env:
+        NODE_ENV: production
+      run: |
+        npm ci
+        npm run build
+        
+    - uses: montudor/action-zip@v1
+      with:
+        args: zip -qq -r build.zip build
+
+    - name: Bump version and push tag
+      uses: anothrNick/github-tag-action@1.26.0
+      env:
+        #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WITH_V: true
+      id: tag_bump
+
+    - name: Upload to release
+      uses: softprops/action-gh-release@v1
+      with:
+        #token: ${{ secrets.GITHUB_TOKEN }}
+        name: release ${{ steps.tag_bump.outputs.new_tag }}
+        tag_name: ${{ steps.tag_bump.outputs.new_tag }}
+        files: |
+          ./target/armv7-unknown-linux-gnueabihf/release/xmc1_rest_api
+          build.zip
