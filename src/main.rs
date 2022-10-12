@@ -4,6 +4,7 @@ use commands::{
 };
 use quick_xml::de::from_str;
 use quick_xml::se::to_string;
+use rocket::fs::FileServer;
 use serde::Serialize;
 use std::env;
 use std::error::Error;
@@ -193,6 +194,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let socket_state = SocketState::new(socket, remote_addr);
     let _rocket = rocket::build()
         .manage(socket_state)
+        .mount("/", FileServer::from("./xmc-remote/build"))
         .mount(
             "/",
             routes![

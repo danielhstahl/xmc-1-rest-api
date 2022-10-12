@@ -38,13 +38,15 @@ jobs:
       with:
         node-version: 16
     - name: compile client
+      working-directory: xmc-remote
       env:
         NODE_ENV: production
       run: |
         npm ci
         npm run build
-        
+
     - uses: montudor/action-zip@v1
+      working-directory: xmc-remote
       with:
         args: zip -qq -r build.zip build
 
@@ -63,4 +65,4 @@ jobs:
         tag_name: ${{ steps.tag_bump.outputs.new_tag }}
         files: |
           ./target/armv7-unknown-linux-gnueabihf/release/xmc1_rest_api
-          build.zip
+          ./xmc-remote/build.zip
