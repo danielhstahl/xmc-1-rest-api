@@ -11,11 +11,12 @@ import { SelectChangeEvent } from '@mui/material/Select';
 import StatusCard from './components/StatusCard';
 import VolumeCard from './components/VolumeCard';
 import AppBar from './components/AppBar';
+import SourceCard from './components/SourceCard';
 
 const mdTheme = createTheme();
 
 function App() {
-  const [xmcStatus, setXmcStatus] = useState<XmcStatus>({ power: Power.Off, source: Source.HDMI1, volume: -100, mode: Mode.surround });
+  const [xmcStatus, setXmcStatus] = useState<XmcStatus>({ power: Power.Off, source: Source.HDMI1, volume: -100, mode: Mode.surround, audioBits: "" });
   useEffect(() => {
     setInterval(() => {
       getStatus().then(setXmcStatus)
@@ -71,8 +72,13 @@ function App() {
             <Grid container spacing={3}>
               <Grid item xs={12} md={8} lg={9}>
                 <StatusCard
+                  audioInfo={xmcStatus.audioBits}
                   onPowerToggle={onPowerToggle}
                   power={xmcStatus.power === Power.On}
+                />
+              </Grid>
+              <Grid item xs={12} md={8} lg={9}>
+                <SourceCard
                   onModeChange={onModeChange}
                   mode={xmcStatus.mode}
                   onInputChange={onInputChange}

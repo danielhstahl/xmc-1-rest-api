@@ -241,6 +241,9 @@ pub struct Volume {}
 pub struct Mode {}
 
 #[derive(Debug, Serialize)]
+pub struct AudioBits {}
+
+#[derive(Debug, Serialize)]
 #[serde(rename = "emotivaUpdate")]
 #[serde(rename_all = "snake_case")]
 pub struct RequestInfo {
@@ -248,6 +251,7 @@ pub struct RequestInfo {
     source: Source,
     volume: Volume,
     mode: Mode,
+    audio_bits: AudioBits,
 }
 
 impl RequestInfo {
@@ -257,6 +261,7 @@ impl RequestInfo {
             source: Source {},
             volume: Volume {},
             mode: Mode {},
+            audio_bits: AudioBits {},
         }
     }
 }
@@ -269,6 +274,7 @@ pub struct GetInfo {
     source: Response<String>,
     volume: Response<f32>,
     mode: Response<String>,
+    audio_bits: Response<String>,
 }
 
 #[derive(Debug, Serialize)]
@@ -278,6 +284,7 @@ pub struct Info {
     source: String,
     volume: f32,
     mode: String,
+    audio_bits: String,
 }
 
 impl Info {
@@ -286,6 +293,7 @@ impl Info {
             power: info.power.value,
             source: info.source.value,
             volume: info.volume.value,
+            audio_bits: info.audio_bits.value,
             mode: if info.mode.value == "Direct" {
                 "Stereo".to_string()
             } else {

@@ -125,15 +125,15 @@ async fn hdmi_input(hdmi_input: String, socket_state: &State<SocketState>) -> io
 #[post("/mode/<mode>")]
 async fn mode(mode: String, socket_state: &State<SocketState>) -> io::Result<Value> {
     let hdmi = match mode.as_str() {
-        "stereo" => Ok(EmotivaControl::direct()),
-        "dolby" => Ok(EmotivaControl::dolby()),
-        "dts" => Ok(EmotivaControl::dts()),
-        "allstereo" => Ok(EmotivaControl::all_stereo()),
-        "auto" => Ok(EmotivaControl::auto()),
-        "referencestereo" => Ok(EmotivaControl::reference_stereo()),
+        "Stereo" => Ok(EmotivaControl::direct()),
+        "Dolby" => Ok(EmotivaControl::dolby()),
+        "DTS" => Ok(EmotivaControl::dts()),
+        "All Stereo" => Ok(EmotivaControl::all_stereo()),
+        "Auto" => Ok(EmotivaControl::auto()),
+        "Reference Stereo" => Ok(EmotivaControl::reference_stereo()),
         _ => Err(io::Error::new(
             io::ErrorKind::InvalidInput,
-            "input must be one of stereo, dolby, dts, allstereo, auto, referencestereo",
+            "input must be one of Stereo, Dolby, DTS, All Stereo, Auto, Reference Stereo",
         )),
     }?;
     let result = send_and_receive_command(hdmi, socket_state).await?;
