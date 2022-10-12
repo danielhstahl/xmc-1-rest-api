@@ -85,7 +85,6 @@ async fn send_and_receive_command<S: Serialize>(
 async fn power(socket_state: &State<SocketState>) -> io::Result<Value> {
     let power = EmotivaControl::power_on();
     let result = send_and_receive_command(power, socket_state).await?;
-    println!("this is a result: {}", result);
     let _response: EmotivaAck =
         from_str(&result).map_err(|e| io::Error::new(io::ErrorKind::Interrupted, e))?;
     Ok(json!({ "status": "ok" }))
