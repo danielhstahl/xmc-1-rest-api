@@ -1,0 +1,14 @@
+[Unit]
+Description=Rest API for XMC1
+After=network-online.target
+ 
+[Service]
+ExecStart=ROCKET_PORT=8000 ROCKET_ADDRESS=0.0.0.0 /home/pi/scripts/xmc1_rest_api
+WorkingDirectory=/home/pi/scripts/
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
