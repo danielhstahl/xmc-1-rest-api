@@ -32,10 +32,7 @@ const VolumeCard = ({ onVolumeChange, volumeUp, volumeDown, volume }: VolumeInpu
         <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center" style={{
             display: "flex",
             alignItems: "center",
-
-
         }}>
-
             <p style={{
                 fontSize: "300%",
                 display: "block",
