@@ -113,7 +113,7 @@ async fn hdmi_input(hdmi_input: String, socket_state: &State<SocketState>) -> io
         "HDMI 8" => Ok(EmotivaControl::set_hdmi_8()),
         _ => Err(io::Error::new(
             io::ErrorKind::InvalidInput,
-            "input must be between 1 and 8 inclusive",
+            "Source must be between HDMI 1 and HDMI 8",
         )),
     }?;
     let result = send_and_receive_command(hdmi, socket_state).await?;

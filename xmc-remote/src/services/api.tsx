@@ -29,7 +29,8 @@ export type XmcStatus = {
     source: Source;
     volume: number;
     mode: Mode;
-    audioBits: string
+    audioBits: string,
+    audioBitstream: string
 };
 
 

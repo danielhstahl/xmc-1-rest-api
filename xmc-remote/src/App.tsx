@@ -16,7 +16,7 @@ import SourceCard from './components/SourceCard';
 const mdTheme = createTheme();
 
 function App() {
-  const [xmcStatus, setXmcStatus] = useState<XmcStatus>({ power: Power.Off, source: Source.HDMI1, volume: -100, mode: Mode.surround, audioBits: "" });
+  const [xmcStatus, setXmcStatus] = useState<XmcStatus>({ power: Power.Off, source: Source.HDMI1, volume: -100, mode: Mode.surround, audioBits: "", audioBitstream: "" });
   useEffect(() => {
     setInterval(() => {
       getStatus().then(setXmcStatus)
@@ -73,6 +73,7 @@ function App() {
               <Grid item xs={12} md={8} lg={9}>
                 <StatusCard
                   audioInfo={xmcStatus.audioBits}
+                  audioBitstream={xmcStatus.audioBitstream}
                   onPowerToggle={onPowerToggle}
                   power={xmcStatus.power === Power.On}
                 />

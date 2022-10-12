@@ -8,15 +8,15 @@ interface StatusInputs {
     onPowerToggle: () => void,
     power: boolean,
     audioInfo: string,
+    audioBitstream: string
 }
 
-const StatusCard = ({ onPowerToggle, power, audioInfo }: StatusInputs) => {
+const StatusCard = ({ onPowerToggle, power, audioInfo, audioBitstream }: StatusInputs) => {
     return <Paper
         sx={{
             p: 2,
             display: 'flex',
             flexDirection: 'column',
-            //height: 240,
         }}
     >
         <FormGroup>
@@ -28,7 +28,16 @@ const StatusCard = ({ onPowerToggle, power, audioInfo }: StatusInputs) => {
                 } label="Power" />
                 <div style={{
                     display: "flex",
-                    //alignItems: "center",
+                }}>
+                    <p style={{
+                        fontSize: "100%",
+                        display: "block",
+                        width: "100%",
+                        textAlign: "center"
+                    }}>{audioBitstream}</p>
+                </div>
+                <div style={{
+                    display: "flex",
                 }}>
                     <p style={{
                         fontSize: "100%",

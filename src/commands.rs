@@ -244,6 +244,9 @@ pub struct Mode {}
 pub struct AudioBits {}
 
 #[derive(Debug, Serialize)]
+pub struct AudioBitstream {}
+
+#[derive(Debug, Serialize)]
 #[serde(rename = "emotivaUpdate")]
 #[serde(rename_all = "snake_case")]
 pub struct RequestInfo {
@@ -252,6 +255,7 @@ pub struct RequestInfo {
     volume: Volume,
     mode: Mode,
     audio_bits: AudioBits,
+    audio_bitstream: AudioBitstream,
 }
 
 impl RequestInfo {
@@ -262,6 +266,7 @@ impl RequestInfo {
             volume: Volume {},
             mode: Mode {},
             audio_bits: AudioBits {},
+            audio_bitstream: AudioBitstream {},
         }
     }
 }
@@ -275,6 +280,7 @@ pub struct GetInfo {
     volume: Response<f32>,
     mode: Response<String>,
     audio_bits: Response<String>,
+    audio_bitstream: Response<String>,
 }
 
 #[derive(Debug, Serialize)]
@@ -285,6 +291,7 @@ pub struct Info {
     volume: f32,
     mode: String,
     audio_bits: String,
+    audio_bitstream: String,
 }
 
 impl Info {
@@ -294,10 +301,10 @@ impl Info {
             source: info.source.value,
             volume: info.volume.value,
             audio_bits: info.audio_bits.value,
-            mode: if info.mode.value == "Direct" {
-                "Stereo".to_string()
-            } else {
-                info.mode.value
+            audio_bitstream: info.audio_bitstream.value,
+            mode: match info.mode.value.as_str() {
+                "Direct" => "Stereo".to_string(),
+                _ => info.mode.value,
             }, //is there a less janky way than this??
         }
     }
