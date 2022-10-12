@@ -50,14 +50,14 @@ jobs:
     - name: Bump version and push tag
       uses: anothrNick/github-tag-action@1.26.0
       env:
-        #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         WITH_V: true
       id: tag_bump
 
     - name: Upload to release
       uses: softprops/action-gh-release@v1
       with:
-        #token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         name: release ${{ steps.tag_bump.outputs.new_tag }}
         tag_name: ${{ steps.tag_bump.outputs.new_tag }}
         files: |
