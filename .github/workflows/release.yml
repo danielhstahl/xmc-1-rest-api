@@ -37,6 +37,7 @@ jobs:
     - uses: actions/setup-node@v3
       with:
         node-version: 16
+
     - name: compile client
       working-directory: xmc-remote
       env:
@@ -46,8 +47,8 @@ jobs:
         npm run build
 
     - uses: montudor/action-zip@v1
-      working-directory: xmc-remote
       with:
+        working-directory: xmc-remote
         args: zip -qq -r build.zip build
 
     - name: Bump version and push tag
