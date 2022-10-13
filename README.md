@@ -23,6 +23,9 @@
 `mkdir xmc-remote`
 `unzip build.zip -d xmc-remote/`
 
+Then copy the binary and the folder into `/usr/bin/xmc1RestApi`
+
 ## Create service
 
 `sudo cp /home/pi/scripts/xmc1RestApi.service /lib/systemd/system/`
+`sudo systemctl start xmc1RestApi.service`
