@@ -3,7 +3,7 @@ export enum Power {
     Off = "Off",
 }
 //why am I geting "surround" back as a mode?
-export enum Mode {
+/*export enum Mode {
     stereo = "Stereo",
     dolby = "Dolby",
     dts = "DTS",
@@ -11,7 +11,7 @@ export enum Mode {
     auto = "Auto",
     referencestereo = "Reference Stereo",
     surround = "Surround" //figure what this actually means!
-}
+}*/
 
 export enum Source {
     HDMI1 = "HDMI 1",
@@ -28,9 +28,10 @@ export type XmcStatus = {
     power: Power;
     source: Source;
     volume: number;
-    mode: Mode;
+    mode: string;
     audioBits: string,
     audioBitstream: string
+    videoFormat: string
 };
 
 
@@ -39,7 +40,7 @@ export const getStatus = () => fetch("/info").then(res => res.json()).then(r => 
 export const volumeUp = () => fetch("/volume/up", { method: "POST" })
 export const volumeDown = () => fetch("/volume/down", { method: "POST" })
 export const setVolume = (volume: number) => fetch(`/volume/${volume}`, { method: "POST" })
-export const setMode = (mode: string) => fetch(`mode/${mode}`, { method: "POST" })
+//export const setMode = (mode: string) => fetch(`mode/${mode}`, { method: "POST" })
 export const setSource = (source: string) => fetch(`input/${source}`, { method: "POST" })
 export const powerOn = () => fetch(`power/on`, { method: "POST" })
 export const standBy = () => fetch(`power/off`, { method: "POST" })

@@ -6,22 +6,24 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import { Source, Power, Mode, XmcStatus, getStatus, volumeUp, volumeDown, setVolume, setMode, setSource, powerOn, standBy } from './services/api'
+import { Source, Power, XmcStatus, getStatus, volumeUp, volumeDown, setVolume, setSource, powerOn, standBy } from './services/api'
 import { SelectChangeEvent } from '@mui/material/Select';
-import StatusCard from './components/StatusCard';
+import StatusCard from './components/PowerCard';
 import VolumeCard from './components/VolumeCard';
 import AppBar from './components/AppBar';
 import SourceCard from './components/SourceCard';
 
 const mdTheme = createTheme();
-
+const REFRESH_IN_MS = 10000 //10 seconds
 function App() {
-  const [xmcStatus, setXmcStatus] = useState<XmcStatus>({ power: Power.Off, source: Source.HDMI1, volume: -100, mode: Mode.surround, audioBits: "", audioBitstream: "" });
+  const [xmcStatus, setXmcStatus] = useState<XmcStatus>({ power: Power.Off, source: Source.HDMI1, volume: -100, mode: "", audioBits: "", audioBitstream: "", videoFormat: "" });
+  const getInfo = () => getStatus().then(setXmcStatus)
   useEffect(() => {
     setInterval(() => {
-      getStatus().then(setXmcStatus)
-    }, 2000)
+      getInfo()
+    }, REFRESH_IN_MS)
   }, [])
+
   const onPowerToggle = () => {
     if (xmcStatus.power === Power.On) {
       setXmcStatus((prev: XmcStatus) => ({ ...prev, power: Power.Off }))
@@ -38,11 +40,6 @@ function App() {
     setVolume(volume)
   }
 
-  const onModeChange = (e: SelectChangeEvent) => {
-    const mode = e.target.value as Mode
-    setXmcStatus((prev: XmcStatus) => ({ ...prev, mode }))
-    setMode(mode)
-  }
 
   const onInputChange = (e: SelectChangeEvent) => {
     const source = e.target.value as Source
@@ -72,18 +69,18 @@ function App() {
             <Grid container spacing={3}>
               <Grid item xs={12} md={8} lg={9}>
                 <StatusCard
-                  audioInfo={xmcStatus.audioBits}
-                  audioBitstream={xmcStatus.audioBitstream}
                   onPowerToggle={onPowerToggle}
                   power={xmcStatus.power === Power.On}
+                  onInputChange={onInputChange}
+                  source={xmcStatus.source}
                 />
               </Grid>
               <Grid item xs={12} md={8} lg={9}>
                 <SourceCard
-                  onModeChange={onModeChange}
-                  mode={xmcStatus.mode}
-                  onInputChange={onInputChange}
-                  source={xmcStatus.source}
+                  audioInfo={xmcStatus.audioBits}
+                  audioMode={xmcStatus.mode}
+                  audioBitstream={xmcStatus.audioBitstream}
+                  videoFormat={xmcStatus.videoFormat}
                 />
               </Grid>
               <Grid item xs={12} md={4} lg={3}>

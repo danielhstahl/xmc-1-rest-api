@@ -36,12 +36,12 @@ pub enum CommandTypes {
     Hdmi6(CommandName),
     Hdmi7(CommandName),
     Hdmi8(CommandName),
-    Direct(CommandName),
+    /*Direct(CommandName),
     Dolby(CommandName),
     DTS(CommandName),
     AllStereo(CommandName),
     Auto(CommandName),
-    ReferenceStereo(CommandName),
+    ReferenceStereo(CommandName),*/
 }
 
 #[derive(Debug, Serialize)]
@@ -169,7 +169,16 @@ impl EmotivaControl {
             }),
         }
     }
-    pub fn direct() -> EmotivaControl {
+    /*pub fn direct() -> EmotivaControl {
+        EmotivaControl {
+            command: CommandTypes::Direct(CommandName {
+                value: "0".to_string(),
+                ack: "yes".to_string(),
+                status: "anything".to_string(),
+            }),
+        }
+    }
+    pub fn stereo() -> EmotivaControl {
         EmotivaControl {
             command: CommandTypes::Direct(CommandName {
                 value: "0".to_string(),
@@ -222,7 +231,7 @@ impl EmotivaControl {
                 status: "anything".to_string(),
             }),
         }
-    }
+    }*/
 }
 
 #[derive(Debug, Serialize)]
@@ -247,6 +256,9 @@ pub struct AudioBits {}
 pub struct AudioBitstream {}
 
 #[derive(Debug, Serialize)]
+pub struct VideoFormat {}
+
+#[derive(Debug, Serialize)]
 #[serde(rename = "emotivaUpdate")]
 #[serde(rename_all = "snake_case")]
 pub struct RequestInfo {
@@ -256,6 +268,7 @@ pub struct RequestInfo {
     mode: Mode,
     audio_bits: AudioBits,
     audio_bitstream: AudioBitstream,
+    video_format: VideoFormat,
 }
 
 impl RequestInfo {
@@ -267,6 +280,7 @@ impl RequestInfo {
             mode: Mode {},
             audio_bits: AudioBits {},
             audio_bitstream: AudioBitstream {},
+            video_format: VideoFormat {},
         }
     }
 }
@@ -281,6 +295,7 @@ pub struct GetInfo {
     mode: Response<String>,
     audio_bits: Response<String>,
     audio_bitstream: Response<String>,
+    video_format: Response<String>,
 }
 
 #[derive(Debug, Serialize)]
@@ -292,6 +307,7 @@ pub struct Info {
     mode: String,
     audio_bits: String,
     audio_bitstream: String,
+    video_format: String,
 }
 
 impl Info {
@@ -302,10 +318,8 @@ impl Info {
             volume: info.volume.value,
             audio_bits: info.audio_bits.value,
             audio_bitstream: info.audio_bitstream.value,
-            mode: match info.mode.value.as_str() {
-                "Direct" => "Stereo".to_string(),
-                _ => info.mode.value,
-            }, //is there a less janky way than this??
+            mode: info.mode.value,
+            video_format: info.video_format.value,
         }
     }
 }

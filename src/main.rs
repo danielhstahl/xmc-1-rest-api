@@ -120,26 +120,29 @@ async fn hdmi_input(hdmi_input: String, socket_state: &State<SocketState>) -> io
         from_str(&result).map_err(|e| io::Error::new(io::ErrorKind::Interrupted, e))?;
     Ok(json!({ "status": "ok" }))
 }
-
+/*
 #[post("/mode/<mode>")]
 async fn mode(mode: String, socket_state: &State<SocketState>) -> io::Result<Value> {
     let hdmi = match mode.as_str() {
-        "Stereo" => Ok(EmotivaControl::direct()),
+        "Direct" => Ok(EmotivaControl::direct()),
+        "Stereo" => Ok(EmotivaControl::stereo()),
         "Dolby" => Ok(EmotivaControl::dolby()),
         "DTS" => Ok(EmotivaControl::dts()),
         "All Stereo" => Ok(EmotivaControl::all_stereo()),
         "Auto" => Ok(EmotivaControl::auto()),
         "Reference Stereo" => Ok(EmotivaControl::reference_stereo()),
+        //PLIIx Music
+        //
         _ => Err(io::Error::new(
             io::ErrorKind::InvalidInput,
-            "input must be one of Stereo, Dolby, DTS, All Stereo, Auto, Reference Stereo",
+            "input must be one of Direct, Stereo, Dolby, DTS, All Stereo, Auto, Reference Stereo",
         )),
     }?;
     let result = send_and_receive_command(hdmi, socket_state).await?;
     let _response: EmotivaAck =
         from_str(&result).map_err(|e| io::Error::new(io::ErrorKind::Interrupted, e))?;
     Ok(json!({ "status": "ok" }))
-}
+}*/
 
 #[post("/volume/up")]
 async fn volume_up(socket_state: &State<SocketState>) -> io::Result<Value> {
@@ -200,7 +203,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 power,
                 standby,
                 hdmi_input,
-                mode,
+                //mode,
                 info,
                 volume_up,
                 volume_down,
