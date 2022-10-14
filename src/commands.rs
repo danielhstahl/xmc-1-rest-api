@@ -36,12 +36,6 @@ pub enum CommandTypes {
     Hdmi6(CommandName),
     Hdmi7(CommandName),
     Hdmi8(CommandName),
-    /*Direct(CommandName),
-    Dolby(CommandName),
-    DTS(CommandName),
-    AllStereo(CommandName),
-    Auto(CommandName),
-    ReferenceStereo(CommandName),*/
 }
 
 #[derive(Debug, Serialize)]
@@ -169,69 +163,6 @@ impl EmotivaControl {
             }),
         }
     }
-    /*pub fn direct() -> EmotivaControl {
-        EmotivaControl {
-            command: CommandTypes::Direct(CommandName {
-                value: "0".to_string(),
-                ack: "yes".to_string(),
-                status: "anything".to_string(),
-            }),
-        }
-    }
-    pub fn stereo() -> EmotivaControl {
-        EmotivaControl {
-            command: CommandTypes::Direct(CommandName {
-                value: "0".to_string(),
-                ack: "yes".to_string(),
-                status: "anything".to_string(),
-            }),
-        }
-    }
-    pub fn dolby() -> EmotivaControl {
-        EmotivaControl {
-            command: CommandTypes::Dolby(CommandName {
-                value: "0".to_string(),
-                ack: "yes".to_string(),
-                status: "anything".to_string(),
-            }),
-        }
-    }
-    pub fn dts() -> EmotivaControl {
-        EmotivaControl {
-            command: CommandTypes::DTS(CommandName {
-                value: "0".to_string(),
-                ack: "yes".to_string(),
-                status: "anything".to_string(),
-            }),
-        }
-    }
-    pub fn all_stereo() -> EmotivaControl {
-        EmotivaControl {
-            command: CommandTypes::AllStereo(CommandName {
-                value: "0".to_string(),
-                ack: "yes".to_string(),
-                status: "anything".to_string(),
-            }),
-        }
-    }
-    pub fn auto() -> EmotivaControl {
-        EmotivaControl {
-            command: CommandTypes::Auto(CommandName {
-                value: "0".to_string(),
-                ack: "yes".to_string(),
-                status: "anything".to_string(),
-            }),
-        }
-    }
-    pub fn reference_stereo() -> EmotivaControl {
-        EmotivaControl {
-            command: CommandTypes::ReferenceStereo(CommandName {
-                value: "0".to_string(),
-                ack: "yes".to_string(),
-                status: "anything".to_string(),
-            }),
-        }
-    }*/
 }
 
 #[derive(Debug, Serialize)]
