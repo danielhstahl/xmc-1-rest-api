@@ -3,13 +3,13 @@ import Grid from '@mui/system/Unstable_Grid';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-interface StatusInputs {
+interface SourceInputs {
     audioBitstream: string,
     audioInfo: string,
     audioMode: string,
     videoFormat: string
 }
-const SourceCard = ({ audioBitstream, audioInfo, audioMode, videoFormat }: StatusInputs) => {
+const SourceCard = ({ audioBitstream, audioInfo, audioMode, videoFormat }: SourceInputs) => {
     return <Paper
         sx={{
             p: 2,

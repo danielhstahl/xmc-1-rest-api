@@ -11,8 +11,8 @@ import CircularProgress, {
 } from '@mui/material/CircularProgress';
 interface VolumeInputs {
     onVolumeChange: (v: number) => void,
-    volumeUp: () => Promise<Response>,
-    volumeDown: () => Promise<Response>,
+    volumeUp: () => void,
+    volumeDown: () => void,
     volume: number,
 
 }
@@ -20,6 +20,7 @@ interface VolumeInputs {
 const CircularProgressWithLabel = (
     props: CircularProgressProps & { value: number, rawValue: number },
 ) => {
+    const { rawValue, ...rest } = props
     return (
         <Box sx={{ position: 'relative', display: 'inline-flex' }}>
             <CircularProgress
@@ -28,7 +29,7 @@ const CircularProgressWithLabel = (
                     color: (theme) => theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
 
                 }}
-                {...props}
+                {...rest}
                 value={100}
             />
             <CircularProgress
@@ -37,7 +38,7 @@ const CircularProgressWithLabel = (
                     position: 'absolute',
                     left: 0,
                 }}
-                disableShrink variant="determinate" {...props} />
+                variant="determinate" {...rest} />
             <Box
                 sx={{
                     top: 0,
@@ -55,7 +56,7 @@ const CircularProgressWithLabel = (
                     variant="h3"
                     component="div"
                     color="text.secondary"
-                >{props.rawValue}</Typography>
+                >{rawValue}</Typography>
             </Box>
         </Box>
     );

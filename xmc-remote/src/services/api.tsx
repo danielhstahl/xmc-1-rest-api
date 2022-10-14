@@ -24,19 +24,29 @@ export enum Source {
     HDMI8 = "HDMI 8"
 }
 
-export type XmcStatus = {
-    power: Power;
-    source: Source;
-    volume: number;
+export interface XmcReadOnly {
     mode: string;
     audioBits: string,
     audioBitstream: string
     videoFormat: string
 };
 
+export interface XmcWrite {
+    power: Power;
+    source: Source;
+    volume: number;
+}
 
 
-export const getStatus = () => fetch("/info").then(res => res.json()).then(r => r as XmcStatus)
+
+export const getReadOnly = () => fetch("/info").then(res => res.json()).then(r => {
+    const { mode, audioBits, audioBitstream, videoFormat } = r
+    return { mode, audioBits, audioBitstream, videoFormat } as XmcReadOnly
+})
+export const getWrite = () => fetch("/info").then(res => res.json()).then(r => {
+    const { power, source, volume } = r
+    return { power, source, volume } as XmcWrite
+})
 export const volumeUp = () => fetch("/volume/up", { method: "POST" })
 export const volumeDown = () => fetch("/volume/down", { method: "POST" })
 export const setVolume = (volume: number) => fetch(`/volume/${volume}`, { method: "POST" })

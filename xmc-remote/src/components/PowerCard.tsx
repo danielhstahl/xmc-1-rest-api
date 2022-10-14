@@ -18,7 +18,7 @@ interface PowerInputs {
 }
 const SOURCE = "Source"
 
-const StatusCard = ({ onPowerToggle, power, onInputChange, source }: PowerInputs) => {
+const PowerCard = ({ onPowerToggle, power, onInputChange, source }: PowerInputs) => {
     return <Paper
         sx={{
             p: 2,
@@ -45,7 +45,7 @@ const StatusCard = ({ onPowerToggle, power, onInputChange, source }: PowerInputs
                         label={SOURCE}
                         onChange={onInputChange}
                     >
-                        {Object.values(Source).map((v) => <MenuItem value={v}>{v}</MenuItem>)}
+                        {Object.values(Source).map((v) => <MenuItem key={v} value={v}>{v}</MenuItem>)}
                     </Select>
                 </FormControl>
             </Grid>
@@ -53,4 +53,4 @@ const StatusCard = ({ onPowerToggle, power, onInputChange, source }: PowerInputs
     </Paper >
 }
 
-export default StatusCard
+export default PowerCard

@@ -170,48 +170,31 @@ impl EmotivaControl {
 pub struct EmotivaPing {}
 
 #[derive(Debug, Serialize)]
-pub struct Power {}
-#[derive(Debug, Serialize)]
-pub struct Source {}
-
-#[derive(Debug, Serialize)]
-pub struct Volume {}
-
-#[derive(Debug, Serialize)]
-pub struct Mode {}
-
-#[derive(Debug, Serialize)]
-pub struct AudioBits {}
-
-#[derive(Debug, Serialize)]
-pub struct AudioBitstream {}
-
-#[derive(Debug, Serialize)]
-pub struct VideoFormat {}
+pub struct EmptyStruct {}
 
 #[derive(Debug, Serialize)]
 #[serde(rename = "emotivaUpdate")]
 #[serde(rename_all = "snake_case")]
 pub struct RequestInfo {
-    power: Power,
-    source: Source,
-    volume: Volume,
-    mode: Mode,
-    audio_bits: AudioBits,
-    audio_bitstream: AudioBitstream,
-    video_format: VideoFormat,
+    power: EmptyStruct,
+    source: EmptyStruct,
+    volume: EmptyStruct,
+    mode: EmptyStruct,
+    audio_bits: EmptyStruct,
+    audio_bitstream: EmptyStruct,
+    video_format: EmptyStruct,
 }
 
 impl RequestInfo {
     pub fn new() -> Self {
         RequestInfo {
-            power: Power {},
-            source: Source {},
-            volume: Volume {},
-            mode: Mode {},
-            audio_bits: AudioBits {},
-            audio_bitstream: AudioBitstream {},
-            video_format: VideoFormat {},
+            power: EmptyStruct {},
+            source: EmptyStruct {},
+            volume: EmptyStruct {},
+            mode: EmptyStruct {},
+            audio_bits: EmptyStruct {},
+            audio_bitstream: EmptyStruct {},
+            video_format: EmptyStruct {},
         }
     }
 }
