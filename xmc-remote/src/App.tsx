@@ -103,7 +103,7 @@ function App() {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
-              <Grid item xs={12} md={8} lg={9}>
+              <Grid item xs={12} md={12} lg={12}>
                 <StatusCard
                   onPowerToggle={onPowerToggle}
                   power={xmcWrite.power === Power.On}
@@ -111,7 +111,7 @@ function App() {
                   source={xmcWrite.source}
                 />
               </Grid>
-              <Grid item xs={12} md={8} lg={9}>
+              <Grid item xs={12} md={6} lg={6}>
                 <SourceCard
                   audioInfo={xmcReadOnly.audioBits}
                   audioMode={xmcReadOnly.mode}
@@ -119,7 +119,7 @@ function App() {
                   videoFormat={xmcReadOnly.videoFormat}
                 />
               </Grid>
-              <Grid item xs={12} md={4} lg={3}>
+              <Grid item xs={12} md={6} lg={6}>
                 <VolumeCard
                   volumeDown={onVolumeDown}
                   volumeUp={onVolumeUp}
