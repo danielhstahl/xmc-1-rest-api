@@ -26,7 +26,7 @@ function App() {
   const holdRefresh = useRef<undefined | ReturnType<typeof setTimeout>>(undefined)
 
   const getParametersLater = () => {
-    if (typeof holdRefresh.current === typeof setTimeout) {
+    if (typeof holdRefresh.current !== undefined) {
       clearTimeout(holdRefresh.current)
     }
     holdRefresh.current = setTimeout(() => {
@@ -41,7 +41,9 @@ function App() {
   }, [])
 
   useEffect(() => {
-    getParameters()
+    setInterval(() => {
+      getParametersLater()
+    }, UPDATE_IN_MS * 2)
   }, [])
 
   const onPowerToggle = () => {
