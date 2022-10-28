@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import './App.css';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -25,14 +25,14 @@ function App() {
 
   const holdRefresh = useRef<undefined | ReturnType<typeof setTimeout>>(undefined)
 
-  const getParametersLater = () => {
-    if (typeof holdRefresh.current !== undefined) {
+  const getParametersLater = useCallback(() => {
+    if (holdRefresh.current !== undefined) {
       clearTimeout(holdRefresh.current)
     }
     holdRefresh.current = setTimeout(() => {
       getParameters()
     }, UPDATE_IN_MS)
-  }
+  }, [])
 
   useEffect(() => {
     setInterval(() => {
@@ -44,7 +44,7 @@ function App() {
     setInterval(() => {
       getParametersLater()
     }, UPDATE_IN_MS * 2)
-  }, [])
+  }, [getParametersLater])
 
   const onPowerToggle = () => {
     if (xmcWrite.power === Power.On) {
