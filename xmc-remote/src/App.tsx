@@ -41,6 +41,7 @@ function App() {
   }, [])
 
   useEffect(() => {
+    getParameters()
     setInterval(() => {
       getParametersLater()
     }, UPDATE_IN_MS * 2)
