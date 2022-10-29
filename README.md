@@ -17,9 +17,11 @@
 
 ## Get on RPI
 
-`curl -L https://github.com/danielhstahl/xmc-1-rest-api/releases/download/v0.6.0/xmc1_rest_api > xmc1_rest_api`
+`export VERSION=v0.16.0`
+
+`curl -L https://github.com/danielhstahl/xmc-1-rest-api/releases/download/${VERSION}/xmc1_rest_api > xmc1_rest_api`
 `chmod +x ./xmc1_rest_api`
-`curl -L https://github.com/danielhstahl/xmc-1-rest-api/releases/download/v0.6.0/build.zip > build.zip`
+`curl -L https://github.com/danielhstahl/xmc-1-rest-api/releases/download/${VERSION}/build.zip > build.zip`
 `mkdir xmc-remote`
 `unzip build.zip -d xmc-remote/`
 
