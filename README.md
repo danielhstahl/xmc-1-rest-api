@@ -1,3 +1,7 @@
+## UI
+
+![XMC UI](./screenshot.png)
+
 ## Curl commands
 
 `curl http://127.0.0.1:8000/info -H 'Content-Type: application/json'`
