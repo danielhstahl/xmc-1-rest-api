@@ -5,7 +5,49 @@ on:
       master
 
 jobs:
+  
+        
+  tests:
+    
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run tests stable
+      run: |
+        rustup update stable
+        cargo test
+        
+  release:
+    needs: tests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # release changes require contents write
+    outputs:
+      tag: ${{ steps.tag_bump.outputs.new_tag }}
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: '0'
+    - name: Bump version and push tag
+      uses: anothrNick/github-tag-action@v1
+      id: tag_bump
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WITH_V: true
+    - name: Download all workflow run artifacts
+      uses: actions/download-artifact@v3
+    - name: list directory
+      run: |
+        ls -la
+    - name: Upload to release
+      uses: softprops/action-gh-release@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: release ${{ steps.tag_bump.outputs.new_tag }}
+        tag_name: ${{ steps.tag_bump.outputs.new_tag }}
+
   build: 
+    needs: release
     runs-on: ubuntu-latest
     name: release ${{ matrix.target }}
     strategy:
@@ -32,18 +74,16 @@ jobs:
         name: xmc1_rest_api-${{ matrix.target }}
         path: target/${{ matrix.target }}/release/xmc1_rest_api
         
-  tests:
-    
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Run tests stable
+    - name: upload artifact
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
       run: |
-        rustup update stable
-        cargo test
+        mv target/${{ matrix.target }}/release/xmc1_rest_api xmc1_rest_api-${{ matrix.target }}
+        gh release upload ${{ needs.release.outputs.tag }} xmc1_rest_api-${{ matrix.target }}
         
   build-ui:
     runs-on: ubuntu-latest
+    needs: release
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v3
@@ -57,38 +97,11 @@ jobs:
         npm ci
         npm run build
         zip -qq -r build.zip build
-    - name: upload ui zip
-      uses: actions/upload-artifact@v3
-      with:
-        name: build.zip
-        path: xmc-remote/build.zip
-
-  release:
-    needs: [build, build-ui]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write # release changes require contents write
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: '0'
-    - name: Bump version and push tag
-      uses: anothrNick/github-tag-action@v1
-      id: tag_bump
+        
+    - name: upload artifact
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        WITH_V: true
-    - name: Download all workflow run artifacts
-      uses: actions/download-artifact@v3
-    - name: list directory
+        GITHUB_TOKEN: ${{ github.token }}
       run: |
-        ls -la
-    - name: Upload to release
-      uses: softprops/action-gh-release@v1
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        name: release ${{ steps.tag_bump.outputs.new_tag }}
-        tag_name: ${{ steps.tag_bump.outputs.new_tag }}
-        files: |
-          xmc1_rest_api*
-          build.zip
+        gh release upload ${{ needs.release.outputs.tag }} xmc-remote/build.zip
+
+  
