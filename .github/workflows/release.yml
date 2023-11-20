@@ -80,6 +80,9 @@ jobs:
         WITH_V: true
     - name: Download all workflow run artifacts
       uses: actions/download-artifact@v3
+    - name: list directory
+      run: |
+        ls -la
     - name: Upload to release
       uses: softprops/action-gh-release@v1
       with:
