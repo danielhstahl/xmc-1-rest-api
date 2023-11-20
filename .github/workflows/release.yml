@@ -87,5 +87,5 @@ jobs:
         name: release ${{ steps.tag_bump.outputs.new_tag }}
         tag_name: ${{ steps.tag_bump.outputs.new_tag }}
         files: |
-          xmc1_rest_api*
-          build.zip
+          xmc-1-rest-api/xmc1_rest_api*
+          xmc-1-rest-api/build.zip
