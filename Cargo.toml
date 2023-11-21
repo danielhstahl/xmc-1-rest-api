@@ -6,15 +6,13 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-quick-xml = { git = "https://github.com/tafia/quick-xml", branch = "master", features = [
-    "serialize",
-] } #{ version = "0.25.0", features = ["serialize"] }
+
+quick-xml = { version = "0.31.0", features = ["serialize"] }
 serde = { version = "1.0", features = ["derive"] }
-local-ip-address = "0.4.8"
 tokio = { version = "1.21.2", features = [
     "net",
     "io-util",
     "macros",
     "rt-multi-thread",
 ] }
-rocket = { version = "0.5.0-rc.2", features = ["json"] }
+rocket = { version = "0.5.0", features = ["json"] }

@@ -3,8 +3,9 @@ Description=Rest API for XMC1
 After=network-online.target
 
 [Service]
-Environment="ROCKET_PORT=8000" "ROCKET_ADDRESS=0.0.0.0"
-ExecStart=/usr/bin/xmc1RestApi/xmc1_rest_api
+Environment="ROCKET_PORT=8000"
+Environment="ROCKET_ADDRESS=0.0.0.0"
+ExecStart=/usr/bin/xmc1RestApi/xmc1_rest_api 192.168.1.50 # IP of XMC
 WorkingDirectory=/usr/bin/xmc1RestApi/
 StandardOutput=file:/tmp/xmc.log
 StandardError=file:/tmp/xmc.log
