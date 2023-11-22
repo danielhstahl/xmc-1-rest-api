@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 
-quick-xml = { version = "0.31.0", features = ["serialize"] }
+quick-xml = { version = "0.27.0", features = ["serialize"] }
 serde = { version = "1.0", features = ["derive"] }
 tokio = { version = "1.21.2", features = [
     "net",

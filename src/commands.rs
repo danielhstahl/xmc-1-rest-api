@@ -258,9 +258,28 @@ pub struct EmotivaTransponder {
 }
 
 #[derive(Debug, Deserialize)]
-#[serde(rename = "emotivaAck")]
 #[serde(rename_all = "camelCase")]
 pub struct EmotivaAck {
-    #[serde(rename = "#any")]
+    #[serde(flatten)]
     any: CommandTypes,
+}
+
+#[cfg(test)]
+mod tests {
+
+    use super::{EmotivaAck, EmotivaControl};
+    use quick_xml::de::from_str;
+    use quick_xml::se::to_string;
+
+    #[test]
+    fn test_serialization() {
+        let result = EmotivaControl::power_on();
+        let _ = to_string(&result).unwrap();
+    }
+
+    #[test]
+    fn test_deserialization() {
+        let message = r#"<?xml version="1.0"?><emotivaAck><power_on status="ack"/></emotivaAck>"#;
+        let _: EmotivaAck = from_str(&message).unwrap();
+    }
 }
