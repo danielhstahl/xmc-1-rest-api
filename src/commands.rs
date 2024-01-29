@@ -36,6 +36,8 @@ pub enum CommandTypes {
     Hdmi6(CommandName),
     Hdmi7(CommandName),
     Hdmi8(CommandName),
+    Stereo(CommandName),
+    Auto(CommandName),
 }
 
 #[derive(Debug, Serialize)]
@@ -157,6 +159,24 @@ impl EmotivaControl {
     pub fn set_hdmi_8() -> EmotivaControl {
         EmotivaControl {
             command: CommandTypes::Hdmi8(CommandName {
+                value: "0".to_string(),
+                ack: "yes".to_string(),
+                status: "anything".to_string(),
+            }),
+        }
+    }
+    pub fn set_stereo() -> EmotivaControl {
+        EmotivaControl {
+            command: CommandTypes::Stereo(CommandName {
+                value: "0".to_string(),
+                ack: "yes".to_string(),
+                status: "anything".to_string(),
+            }),
+        }
+    }
+    pub fn set_auto() -> EmotivaControl {
+        EmotivaControl {
+            command: CommandTypes::Auto(CommandName {
                 value: "0".to_string(),
                 ack: "yes".to_string(),
                 status: "anything".to_string(),
