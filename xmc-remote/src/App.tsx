@@ -6,7 +6,22 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import { Source, Power, XmcReadOnly, XmcWrite, getReadOnly, getWrite, volumeUp, volumeDown, setVolume, setSource, powerOn, standBy } from './services/api'
+import {
+  Source,
+  Power,
+  XmcReadOnly,
+  XmcWrite,
+  getReadOnly,
+  getWrite,
+  volumeUp,
+  volumeDown,
+  setVolume,
+  setSource,
+  powerOn,
+  standBy,
+  setMode,
+  Mode,
+} from './services/api'
 import { SelectChangeEvent } from '@mui/material/Select';
 import StatusCard from './components/PowerCard';
 import VolumeCard from './components/VolumeCard';
@@ -17,8 +32,8 @@ const mdTheme = createTheme();
 const REFRESH_IN_MS = 1000 //1 seconds
 const UPDATE_IN_MS = 3000 //3 seconds
 function App() {
-  const [xmcReadOnly, setXmcStatus] = useState<XmcReadOnly>({ mode: "", audioBits: "", audioBitstream: "", videoFormat: "" });
-  const [xmcWrite, setXmcWrite] = useState<XmcWrite>({ power: Power.Off, source: Source.HDMI1, volume: -100 });
+  const [xmcReadOnly, setXmcStatus] = useState<XmcReadOnly>({ audioMode: "", audioBits: "", audioBitstream: "", videoFormat: "" });
+  const [xmcWrite, setXmcWrite] = useState<XmcWrite>({ power: Power.Off, source: Source.HDMI1, volume: -100, mode: Mode.auto });
 
   const getInfo = () => getReadOnly().then(setXmcStatus)
   const getParameters = () => getWrite().then(setXmcWrite)
@@ -74,6 +89,13 @@ function App() {
     getParametersLater()
   }
 
+  const onModeChange = (e: SelectChangeEvent) => {
+    const mode = e.target.value as Mode
+    setXmcWrite((prev: XmcWrite) => ({ ...prev, mode }))
+    setMode(mode)
+    getParametersLater()
+  }
+
   const onVolumeUp = () => {
     volumeUp()
     setXmcWrite((prev: XmcWrite) => ({ ...prev, volume: prev.volume + 1 }))
@@ -111,13 +133,15 @@ function App() {
                   onPowerToggle={onPowerToggle}
                   power={xmcWrite.power === Power.On}
                   onInputChange={onInputChange}
+                  mode={xmcWrite.mode}
+                  onModeChange={onModeChange}
                   source={xmcWrite.source}
                 />
               </Grid>
               <Grid item xs={12} md={6} lg={6}>
                 <SourceCard
+                  audioMode={xmcReadOnly.audioMode}
                   audioInfo={xmcReadOnly.audioBits}
-                  audioMode={xmcReadOnly.mode}
                   audioBitstream={xmcReadOnly.audioBitstream}
                   videoFormat={xmcReadOnly.videoFormat}
                 />

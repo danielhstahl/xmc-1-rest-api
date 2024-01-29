@@ -149,6 +149,24 @@ async fn set_volume(volume: i32, socket_state: &State<SocketState>) -> io::Resul
     Ok(json!({ "status": "ok" }))
 }
 
+#[post("/mode/stereo")]
+async fn set_stereo(socket_state: &State<SocketState>) -> io::Result<Value> {
+    let stereo = EmotivaControl::set_stereo();
+    let result = send_and_receive_command(stereo, socket_state).await?;
+    let _response: EmotivaAck =
+        from_str(&result).map_err(|e| io::Error::new(io::ErrorKind::Interrupted, e))?;
+    Ok(json!({ "status": "ok" }))
+}
+
+#[post("/mode/auto")]
+async fn set_auto(socket_state: &State<SocketState>) -> io::Result<Value> {
+    let auto = EmotivaControl::set_auto();
+    let result = send_and_receive_command(auto, socket_state).await?;
+    let _response: EmotivaAck =
+        from_str(&result).map_err(|e| io::Error::new(io::ErrorKind::Interrupted, e))?;
+    Ok(json!({ "status": "ok" }))
+}
+
 //I just need to periodically ping this to get the latest status... :(.
 #[get("/info")]
 async fn info(socket_state: &State<SocketState>) -> io::Result<Json<Info>> {
@@ -163,7 +181,7 @@ async fn info(socket_state: &State<SocketState>) -> io::Result<Json<Info>> {
 async fn main() -> Result<(), Box<dyn Error>> {
     let remote_ip: IpAddr = env::args()
         .nth(1)
-        .unwrap_or_else(|| "192.168.4.75".to_string())
+        .unwrap_or_else(|| "192.168.4.38".to_string())
         .parse()?;
     let init_remote_addr = SocketAddr::new(remote_ip, XMC_PORT);
     let socket = get_socket(&init_remote_addr, XMC_RECEIVE_PORT).await?;
@@ -183,7 +201,9 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 info,
                 volume_up,
                 volume_down,
-                set_volume
+                set_volume,
+                set_stereo,
+                set_auto
             ],
         )
         .ignite()

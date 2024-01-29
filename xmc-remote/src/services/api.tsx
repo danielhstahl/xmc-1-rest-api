@@ -24,9 +24,14 @@ export enum Source {
     HDMI8 = "HDMI 8"
 }
 
+export enum Mode {
+    stereo = "Stereo",
+    auto = "Auto"
+}
+
 export interface XmcReadOnly {
-    mode: string;
-    audioBits: string,
+    audioBits: string
+    audioMode: string
     audioBitstream: string
     videoFormat: string
 };
@@ -35,17 +40,19 @@ export interface XmcWrite {
     power: Power;
     source: Source;
     volume: number;
+    mode: Mode;
 }
 
 
 
 export const getReadOnly = () => fetch("/info").then(res => res.json()).then(r => {
-    const { mode, audioBits, audioBitstream, videoFormat } = r
-    return { mode, audioBits, audioBitstream, videoFormat } as XmcReadOnly
+    const { audioBits, mode, audioBitstream, videoFormat } = r
+    return { audioBits, audioMode: mode, audioBitstream, videoFormat } as XmcReadOnly
 })
 export const getWrite = () => fetch("/info").then(res => res.json()).then(r => {
-    const { power, source, volume } = r
-    return { power, source, volume } as XmcWrite
+    const { power, source, volume, mode } = r
+    const convertedMode = mode !== Mode.stereo ? Mode.auto : Mode.stereo
+    return { power, source, volume, mode: convertedMode } as XmcWrite
 })
 export const volumeUp = () => fetch("/volume/up", { method: "POST" })
 export const volumeDown = () => fetch("/volume/down", { method: "POST" })
@@ -53,3 +60,5 @@ export const setVolume = (volume: number) => fetch(`/volume/${volume}`, { method
 export const setSource = (source: Source) => fetch(`/input/${source}`, { method: "POST" })
 export const powerOn = () => fetch(`/power/on`, { method: "POST" })
 export const standBy = () => fetch(`/power/off`, { method: "POST" })
+
+export const setMode = (mode: string) => fetch(`/mode/${mode.toLowerCase()}`, { method: "POST" })
